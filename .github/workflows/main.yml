@@ -31,8 +31,8 @@ jobs:
       - name: Wait for the application to start
         run: sleep 10
 
-      - name: Get logs from the application
-        run: docker logs my-flask-app
+      #      - name: Get logs from the application
+      #        run: docker logs my-flask-app
 
       - name: Check if the container is running
         run: docker ps
