@@ -9,17 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      my-flask-app:
-        image: my-flask-app
-        ports:
-          - 5000:5000
-        options: >-
-          --health-cmd="curl --fail http://localhost:5000/ || exit 1"
-          --health-interval=30s
-          --health-timeout=10s
-          --health-retries=3
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -34,7 +23,18 @@ jobs:
           echo "Building the application..."
           docker build -t my-flask-app .
 
+      - name: Start the application
+        run: |
+          echo "Starting the application..."
+          docker run -d --name my-flask-app -p 5000:5000 --health-cmd="curl --fail http://localhost:5000/ || exit 1" --health-interval=30s --health-timeout=10s --health-retries=3 my-flask-app
+
       - name: Run tests
         run: |
           echo "Running tests..."
           curl --fail http://localhost:5000/ || exit 1
+
+      - name: Stop the application
+        run: |
+          echo "Stopping the application..."
+          docker stop my-flask-app
+          docker rm my-flask-app
