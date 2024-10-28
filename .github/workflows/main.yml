@@ -28,6 +28,15 @@ jobs:
           echo "Starting the application..."
           docker run -p 5000:5000 -d  my-flask-app
 
+      - name: Wait for the application to start
+        run: sleep 10
+
+      - name: Get logs from the application
+        run: docker logs my-flask-app
+
+      - name: Check if the container is running
+        run: docker ps
+
       - name: Run tests
         run: |
           echo "Running tests..."
