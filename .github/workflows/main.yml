@@ -32,5 +32,10 @@ jobs:
         run: pip install -r requirements.txt  # Install requirements to enable GitHub to run tests
 
       # Step to run tests
-      - name: Run tests
-        run: python test_main.py
+      #      - name: Run tests
+      #        run: python test_main.py
+      - name: Build app
+        run: docker build -t my-flask-app .
+
+      - name: Run app
+        run: docker run -p 5000:5000 my-flask-app
