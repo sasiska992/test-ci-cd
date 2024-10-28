@@ -21,21 +21,21 @@ jobs:
       - name: Build the application
         run: |
           echo "Building the application..."
-          docker build -t my-flask-app .
+          docker build -t my-flask-app:latest .
 
       - name: Start the application
         run: |
           echo "Starting the application..."
-          docker run -p 5000:5000 -d  my-flask-app
+          docker run -p 5000:5000 -d --name my-running-flask-app my-flask-app:latest
 
       - name: Wait for the application to start
         run: sleep 10
 
-      #      - name: Get logs from the application
-      #        run: docker logs my-flask-app
-
       - name: Check if the container is running
         run: docker ps
+
+      - name: Get logs from the application
+        run: docker logs my-running-flask-app || echo "No logs available or container not running"
 
       - name: Run tests
         run: |
@@ -45,5 +45,5 @@ jobs:
       - name: Stop the application
         run: |
           echo "Stopping the application..."
-          docker stop my-flask-app
-          docker rm my-flask-app
+          docker stop my-running-flask-app
+          docker rm my-running-flask-app
