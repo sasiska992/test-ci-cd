@@ -3,12 +3,10 @@ name: CI/CD
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,19 +21,22 @@ jobs:
           echo "Building the application..."
           docker build -t sasiska228/test_ci_cd:latest .
 
-  runing_app:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Start the application
-      run: |
-        echo "Starting the application..."
-        docker run -p 5000:5000 -d --name my-running-flask-app sasiska228/test_ci_cd:latest
+      - name: Start the application
+        run: |
+          echo "Starting the application..."
+          docker run -p 5000:5000 -d --name my-running-flask-app sasiska228/test_ci_cd:latest
 
-    - name: Run tests
-      run: |
-        echo "Running tests..."
-        curl --fail http://localhost:5000/ || exit 1
+      - name: Run tests
+        run: |
+          echo "Running tests..."
+          curl --fail http://localhost:5000/ || exit 1
+
+      - name: Stop and remove the application
+        run: |
+          echo "Stopping and removing the application..."
+          docker stop my-running-flask-app || true
+          docker rm my-running-flask-app || true
+
   pushing:
     needs: [runing_app, build]
     runs-on: ubuntu-latest
