@@ -69,7 +69,7 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Pull image
-      runs: |
+      run: |
         docker pull sasiska228/test_ci_cd:latest
 
     - name: Reloading app
