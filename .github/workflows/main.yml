@@ -38,7 +38,7 @@ jobs:
           docker rm my-running-flask-app || true
 
   pushing:
-    needs: [runing_app, build]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
     -
