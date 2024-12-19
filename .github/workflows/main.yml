@@ -68,6 +68,10 @@ jobs:
     needs: [build, pushing]
     runs-on: self-hosted
     steps:
+    - name: Pull image
+      runs: |
+        docker pull sasiska228/test_ci_cd:latest
+
     - name: Reloading app
       run: |
           docker stop my-running-flask-app ||
